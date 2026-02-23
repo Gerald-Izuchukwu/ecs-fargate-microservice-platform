@@ -55,11 +55,11 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: ./app
-        push: false
+        push: true
         # tags: ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:latest
-        tags: ${{ steps.login-ecr.outputs.registry }}/my-app:latest
+        tags: ${{ steps.login-ecr.outputs.registry }}/my-microservice:latest
     - name: print tags
-      run: echo "Docker Image built and tagged as ${{ steps.login-ecr.outputs.registry }}/my-app:latest"
+      run: echo "Docker Image built and tagged as ${{ steps.login-ecr.outputs.registry }}/my-microservice:latest"
     # steps:
     # - name: checkout code
     #   uses: actions/checkout@v4
