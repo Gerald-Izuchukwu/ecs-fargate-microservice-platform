@@ -53,7 +53,7 @@ jobs:
     - name: Build and Push Docker Image
       uses: docker/build-push-action@v5
       with:
-        context: .
+        context: ./app
         push: false
         # tags: ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:latest
         tags: ${{ steps.login-ecr.outputs.registry }}/my-app:latest
