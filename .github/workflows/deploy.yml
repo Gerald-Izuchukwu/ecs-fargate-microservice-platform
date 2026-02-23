@@ -26,6 +26,7 @@ jobs:
         severity: 'CRITICAL,HIGH'
         format: 'table'
         exit-code: '1'
+        scanners: 'vuln,secret,misconfig'
 
   build-and-deploy:
     name: Package and Build Image
