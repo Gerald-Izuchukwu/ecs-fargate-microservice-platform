@@ -1,0 +1,27 @@
+name: Deploy app to AWS ECS FARGATE
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  deploy:
+    name: scan code for security
+    runs-on: [ ubuntu-latest ]
+    if: github.event_name == "push"
+
+    steps:
+    - name: checkout code
+      uses: actions/checkout@v4
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: javascript
+    - name: perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+
+# - check code
+# - build docker image
+# - push docker image to ECR
+# - deploy to ECS Fargate by calling terraform apply
