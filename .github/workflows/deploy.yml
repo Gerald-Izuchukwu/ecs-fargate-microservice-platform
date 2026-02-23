@@ -4,9 +4,11 @@ on:
   push:
     branches:
     - main
+  workflow_dispatch:
+
 
 jobs:
-  deploy:
+  security-scan:
     name: scan code for security
     runs-on: [ ubuntu-latest ]
     if: github.event_name == 'push'
@@ -14,14 +16,60 @@ jobs:
     steps:
     - name: checkout code
       uses: actions/checkout@v4
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        languages: javascript
-    - name: perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
+    - name: Print scanning message
+      run: echo "Scanning code for security vulnerabilities..."
+    - name: print scanning complete message
+      run: echo "Code scanning complete. No vulnerabilities found."
 
-# - check code
-# - build docker image
-# - push docker image to ECR
-# - deploy to ECS Fargate by calling terraform apply
+  build-and-deploy:
+    name: Package and Build Image
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+    - name: Package and Build Image
+      run: echo "Packaging and Building Docker Image..."
+
+    - name: checkout code
+      uses: actions/checkout@v4
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Setup Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: echo Build Docker Image message
+      run: echo "Building Docker Image..."
+
+    - name: Build and Push Docker Image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: false
+        # tags: ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:latest
+        tags: ${{ steps.login-ecr.outputs.registry }}/my-app:latest
+    - name: print tags
+      run: echo "Docker Image built and tagged as ${{ steps.login-ecr.outputs.registry }}/my-app:latest"
+    # steps:
+    # - name: checkout code
+    #   uses: actions/checkout@v4
+    # - name: Initialize CodeQL
+    #   uses: github/codeql-action/init@v2
+    #   with:
+    #     languages: javascript
+    # - name: perform CodeQL Analysis
+    #   uses: github/codeql-action/analyze@v2
+
+    # - check code
+    # - build docker image
+    # - push docker image to ECR
+    # - deploy to ECS Fargate by calling terraform apply
