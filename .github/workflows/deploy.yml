@@ -9,7 +9,7 @@ jobs:
   deploy:
     name: scan code for security
     runs-on: [ ubuntu-latest ]
-    if: github.event_name == "push"
+    if: github.event_name == 'push'
 
     steps:
     - name: checkout code
