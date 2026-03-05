@@ -59,7 +59,8 @@ resource "aws_ecs_task_definition" "app" {
   container_definitions = jsonencode([
     {
       name      = "api"
-      image     = "${var.ecr_repository_url}:latest"
+      # image     = "${var.ecr_repository_url}:latest"
+      image     = "058264369379.dkr.ecr.eu-north-1.amazonaws.com/my-microservice:latest"
       essential = true
 
       portMappings = [

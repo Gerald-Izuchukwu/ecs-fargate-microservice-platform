@@ -15,16 +15,16 @@ app.get('/health', (req, res) => {
 
 // Create user
 app.post('/users', async (req, res) => {
-  const { userId, name, email } = req.body;
+  const { userID, name, email } = req.body;
   
   const params = {
     TableName: USERS_TABLE,
-    Item: { userId, name, email, createdAt: new Date().toISOString() }
+    Item: { userID, name, email, createdAt: new Date().toISOString() }
   };
 
   try {
     await dynamodb.put(params).promise();
-    res.status(201).json({ userId, name, email });
+    res.status(201).json({ userID, name, email });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Could not create user' });
@@ -34,7 +34,7 @@ app.post('/users', async (req, res) => {
 app.get('/users/:userId', async (req, res) => {
   const params = {
     TableName: USERS_TABLE,
-    Key: { userId: req.params.userId }
+    Key: { userID: req.params.userID }
   };
 
   try {
@@ -51,13 +51,13 @@ app.get('/users/:userId', async (req, res) => {
 });
 
 app.post('/tasks', async (req, res) => {
-  const { taskId, userId, description } = req.body;
+  const { taskID, userID, description } = req.body;
   
   const params = {
     TableName: TASKS_TABLE,
     Item: { 
-      taskId, 
-      userId, 
+      taskID, 
+      userID, 
       description, 
       status: 'pending',
       createdAt: new Date().toISOString() 
@@ -65,7 +65,7 @@ app.post('/tasks', async (req, res) => {
   };
     try {
     await dynamodb.put(params).promise();
-    res.status(201).json({ taskId, userId, description, status: 'pending' });
+    res.status(201).json({ taskID, userID, description, status: 'pending' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Could not create task' });
@@ -75,7 +75,7 @@ app.post('/tasks', async (req, res) => {
 app.get('/tasks/:taskId', async (req, res) => {
   const params = {
     TableName: TASKS_TABLE,
-    Key: { taskId: req.params.taskId }
+    Key: { taskID: req.params.taskID }
   };
 
   try {

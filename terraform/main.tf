@@ -10,11 +10,11 @@ module "dynamodb" {
   environment  = var.environment
 }
 
-module "ecr" {
-  source       = "./ecr"
-  project_name = var.project_name
-  environment  = var.environment
-}
+# module "ecr" {
+#   source       = "./ecr"
+#   project_name = var.project_name
+#   environment  = var.environment
+# }
 
 module "iam" {
   source          = "./iam"
@@ -49,7 +49,7 @@ module "ecs" {
   alb_listener_arn       = module.alb.alb_listener_arn
   ecs_execution_role_arn = module.iam.ecs_execution_role_arn
   ecs_task_role_arn      = module.iam.ecs_task_role_arn
-  ecr_repository_url     = module.ecr.repository_url
+  # ecr_repository_url     = module.ecr.repository_url
   users_table_name       = module.dynamodb.users_table_name
   tasks_table_name       = module.dynamodb.tasks_table_name
   log_group_name         = module.cloudwatch.log_group_name

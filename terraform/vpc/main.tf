@@ -58,7 +58,7 @@ resource "aws_nat_gateway" "nat" {
   }
 }
 
-resource "aws_route_table" "public_route_table" {
+resource "aws_route_table" "public_rtb" {
   vpc_id = aws_vpc.ecs_fargate.id
   route {
     cidr_block = "0.0.0.0/0"
@@ -72,10 +72,10 @@ resource "aws_route_table" "public_route_table" {
 resource "aws_route_table_association" "public_subnet" {
   count          = 2
   subnet_id      = aws_subnet.public[count.index].id
-  route_table_id = aws_route_table.public_route_table.id
+  route_table_id = aws_route_table.public_rtb.id
 }
 
-resource "aws_route_table" "private_subnet" {
+resource "aws_route_table" "private_rtb" {
   vpc_id = aws_vpc.ecs_fargate.id
   route {
     cidr_block = "0.0.0.0/0"
@@ -90,7 +90,7 @@ resource "aws_route_table" "private_subnet" {
 resource "aws_route_table_association" "private_subnet" {
   count          = 2
   subnet_id      = aws_subnet.private[count.index].id
-  route_table_id = aws_route_table.private_subnet.id
+  route_table_id = aws_route_table.private_rtb.id
 }
 
 
