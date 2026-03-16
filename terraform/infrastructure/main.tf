@@ -1,11 +1,11 @@
 module "vpc" {
-  source       = "./vpc"
+  source       = "./modules/vpc"
   project_name = var.project_name
   aws_region   = var.aws_region
 }
 
 module "dynamodb" {
-  source       = "./dynamodb"
+  source       = "./modules/dynamodb"
   project_name = var.project_name
   environment  = var.environment
 }
@@ -17,20 +17,20 @@ module "dynamodb" {
 # }
 
 module "iam" {
-  source          = "./iam"
+  source          = "./modules/iam"
   project_name    = var.project_name
   users_table_arn = module.dynamodb.users_table_arn
   tasks_table_arn = module.dynamodb.tasks_table_arn
 }
 
 module "cloudwatch" {
-  source       = "./cloudwatch"
+  source       = "./modules/cloudwatch"
   project_name = var.project_name
   environment  = var.environment
 }
 
 module "alb" {
-  source            = "./alb"
+  source            = "./modules/alb"
   project_name      = var.project_name
   environment       = var.environment
   vpc_id            = module.vpc.vpc_id
@@ -38,7 +38,7 @@ module "alb" {
 }
 
 module "ecs" {
-  source                 = "./ecs"
+  source                 = "./modules/ecs"
   project_name           = var.project_name
   environment            = var.environment
   aws_region             = var.aws_region

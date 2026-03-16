@@ -6,6 +6,14 @@ terraform {
     }
   }
 
+  backend "s3" {
+  bucket         = "ecs-fargate-microservice-platform-bucket"
+  key            = "infrastructure/terraform.tfstate"
+  region         = "us-east-1"
+  dynamodb_table = "ecs-fargate-microservice-platform-table"
+  encrypt        = true
+}
+
   required_version = ">= 1.0"
 }
 

@@ -13,6 +13,7 @@ resource "aws_subnet" "public" {
 
   vpc_id     = aws_vpc.ecs_fargate.id
   cidr_block = cidrsubnet("10.0.0.0/16", 8, count.index) #cidrsubnet(base_cidr, newbits, subnet_number)
+  # cidr_block              = "10.0.${count.index}.0/24"
   availability_zone = "${var.aws_region}${element(["a", "b"], count.index)}" // this will work but is not dynamic or scalable, what if we have 3 subnets, we will have to then add "c" to the list and so on, this is not ideal
   # availability_zone =  element(data.aws_availability_zones.available.names, count.index) // this is the best option because it is dynamic and scalable, it will return the availability zones in the region and we can have as many subnets as we want without having to worry about the availability zones
   map_public_ip_on_launch = true
@@ -25,6 +26,7 @@ resource "aws_subnet" "private" {
   count             = 2
   vpc_id            = aws_vpc.ecs_fargate.id
   cidr_block        = cidrsubnet("10.0.0.0/16", 8, count.index + 10)
+  # cidr_block        = "10.0.${count.index + 10}.0/24"
   availability_zone = "${var.aws_region}${element(["a", "b"], count.index)}"
 
   tags = {

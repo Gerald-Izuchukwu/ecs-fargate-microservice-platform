@@ -5,3 +5,8 @@ terraform/terraform.tfstate
 terraform/*.tfstate
 terraform/*.tfstate.backup
 *.tfvars
+tf.plan
+terraform.tfstate
+terraform.tfstate.backup
+terraform/backend/
+terraform/infrastructure/.terraform/
